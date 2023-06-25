@@ -20,7 +20,7 @@ import (
 )
 
 const (
-	GEN_VERSION = "0.0.1"
+	GEN_VERSION = "0.1.0"
 )
 
 type generator struct {

@@ -9,6 +9,8 @@ service HelloWorld {
 
   // Echo will return the data back into the response
   rpc Echo(EchoRequest) returns (EchoResponse);
+
+  rpc Err(EmptyRequest) returns (EmptyResponse);
 }
 
 message HelloRequest {
@@ -25,4 +27,12 @@ message EchoRequest {
 
 message EchoResponse {
   bytes data = 1;
+}
+
+message EmptyResponse {
+
+}
+
+message EmptyRequest {
+
 }
