@@ -1,6 +1,6 @@
 # Protobuf Generator for NATS Micro Services
 
-This prototype code generator will take protobuf RPC and render services into [NATS](https://nats.io) [micro services](https://pkg.go.dev/github.com/nats-io/nats.go/micro). The reason for the creation of this was to start building a framework on top of the `micro.Service` implementation that is more usable by end users.
+This prototype code generator will take protobuf RPC and render services into [NATS](https://nats.io) [micro services](https://pkg.go.dev/github.com/nats-io/nats.go/micro). The reason for the creation of this was to start building a framework on top of the `micro.Service` implementation that is more usable by end users. **STREAM** is not supported in either direction and will be ignored in method signatures.
 
 See the [examples](./examples/) for the proto files input and output created [hello.nats.go](./examples/hello.nats.go).
 
