@@ -38,7 +38,7 @@ func (g *generator) generateInterface(file *descriptor.FileDescriptorProto, serv
 		g.printComments(comments)
 		g.P(`// `)
 	}
-	g.P(`// Service will use the "` + file.GetPackage() + `" service group`)
+	g.P(`// Service will use the "`, file.GetPackage(), `.`, strings.ToLower(serviceName), `" service group`)
 
 	g.P(`type `, serviceName, ` interface {`)
 	for _, method := range service.Method {
@@ -47,7 +47,7 @@ func (g *generator) generateInterface(file *descriptor.FileDescriptorProto, serv
 			g.printComments(comments)
 			g.P(`// `)
 		}
-		g.P(`// Method subject will be "` + file.GetPackage() + `.` + strings.ToLower(method.GetName()) + `"`)
+		g.P(`// Method subject will be "`, file.GetPackage(), `.`, strings.ToLower(serviceName), `.`, strings.ToLower(method.GetName()), `"`)
 
 		g.P(g.generateSignature(method))
 		g.P()
@@ -79,7 +79,7 @@ func (g *generator) generateClient(file *descriptor.FileDescriptorProto, service
 
 		g.P(`	   	func (impl *`, clientTypeName, `Client) `, method.GetName(), `(ctx context.Context, req *`, inputType, `) (*`, outputType, `, error) {`)
 		g.P(`	   		data, _ := json.Marshal(req)`)
-		g.P(`	   		resp, err := impl.nc.RequestWithContext(ctx, "`, pkgName, `.`, endpointName, `", data)`)
+		g.P(`	   		resp, err := impl.nc.RequestWithContext(ctx, "`, pkgName, `.`, strings.ToLower(serviceName), `.`, endpointName, `", data)`)
 		g.P(`	   		if err != nil {`)
 		g.P(`	   			return nil, err`)
 		g.P(`	   		}`)
@@ -104,7 +104,7 @@ func (g *generator) generateClient(file *descriptor.FileDescriptorProto, service
 func (g *generator) generateServer(file *descriptor.FileDescriptorProto, service *descriptor.ServiceDescriptorProto) {
 	pkgName := file.GetPackage()
 	serviceName := stringutils.CamelCase(service.GetName())
-	microServiceName := strings.ToLower(strings.ReplaceAll(pkgName, ".", "-"))
+	microServiceName := strings.ToLower(strings.ReplaceAll(pkgName+"."+serviceName, ".", "-"))
 
 	g.P(`// New`, serviceName, `Server builds a new micro.Service that will be registered with the instance provided`)
 	g.P(`// Each RPC on the service will be mapped to a new endpoint within the micro service`)
@@ -126,7 +126,7 @@ func (g *generator) generateServer(file *descriptor.FileDescriptorProto, service
 	g.P(`		return nil, fmt.Errorf("failed to create nats service: %w", err)`)
 	g.P(`	}`)
 	g.P()
-	g.P(`	group := svc.AddGroup("`, pkgName, `")`)
+	g.P(`	group := svc.AddGroup("`, pkgName, `.`, strings.ToLower(serviceName), `")`)
 	g.P()
 
 	for _, method := range service.Method {

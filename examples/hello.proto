@@ -1,6 +1,6 @@
 syntax = "proto3";
-package com.renevo.helloworld;
-option go_package = "github.com/renevo/helloworld";
+package com.renevo.examples;
+option go_package = "github.com/renevo/examples/helloworld";
 
 // Simple hello world service
 service HelloWorld {
