@@ -4,13 +4,25 @@ This prototype code generator will take protobuf RPC and render services into [N
 
 See the [examples](./examples/) for the proto files input and output created [hello.nats.go](./examples/hello.nats.go).
 
-This is not yet complete, and has some work left to do.
+The code is heavily based on the [Twirp](https://github.com/twitchtv/twirp) implementation. Some improvements may be done internally, and the API may change to allow more `--nats_opt` values.
 
 ## Installation
 
 ```bash
 go install github.com/renevo/protoc-gen-nats@latest
 ```
+
+## Options
+
+Options in `protoc` can be provided by using the `--nats_opt=<options>` argument. Arguments are provided in a `<key>=<value>` syntax, boolean options do not require a key.
+
+| Key | Value | Description| Example |
+|-----|-------|------------|---------|
+|`paths`| `import` | Will use the `go_package` path to generate files, this is relative to the working directory (default behavior) | `--nats_opt=paths=import`|
+|`paths`| `source_relative` | Will generate the files next to the proto files | `--nats_opt=paths=source_relative`|
+|`source_relative`| `true` | Will generate the files next to the proto files | `--nats_opt=source_relative`|
+
+More options will be added in the future.
 
 ## Example Usage
 
@@ -22,3 +34,15 @@ go install github.com/renevo/protoc-gen-nats@latest
 
 protoc --go_out=. --go_opt=paths=source_relative --nats_out=. --nats_opt=source_relative ./examples/hello.proto
 ```
+
+
+## Development
+
+In order to actually do development with the plugin, you can use the following:
+
+```bash
+go build .
+protoc --go_out=. --go_opt=paths=source_relative --nats_out=. --nats_opt=source_relative --plugin=$(pwd)/protoc-gen-nats ./examples/hello.proto
+```
+
+This will compile the plugin and then specify it in the protoc command line without having to install it.
